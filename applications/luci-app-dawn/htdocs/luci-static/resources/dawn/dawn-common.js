@@ -55,7 +55,7 @@ function getFormattedNumber(num, decimals, divider = 1) {
 }
 
 function getHostnameFromMAC(hosthints, mac) {
-  return ( hosthints[mac] && hosthints[mac].name ? hosthints[mac].name : mac);
+    return ( hosthints[mac] && hosthints[mac].name ? hosthints[mac].name + ' (' + mac + ')' : mac);
 }
 
 return L.Class.extend({
