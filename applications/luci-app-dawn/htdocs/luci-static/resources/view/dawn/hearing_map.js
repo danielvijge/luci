@@ -11,6 +11,7 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			dawn.callDawnGetHearingMap(),
+			dawn.callDawnGetNetwork(),
 			dawn.callHostHints()
 		]);
 	},
@@ -18,7 +19,16 @@ return view.extend({
 	render: function(data) {
 
 		const dawnHearingMapData = data[0];
-		const hostHintsData = data[1];
+		const dawnNetworkData = data[1];
+		const hostHintsData = data[2];
+
+		let ap_map = {};
+		for (let network in dawnNetworkData) {
+			let aps = Object.entries(dawnNetworkData[network]).map(function(ap) {
+				console.log(ap);
+				ap_map[ap[0]] = {name: ap[1].hostname};
+			});
+		}
 
 		const body = E([
 			E('h2', _('Hearing Map'))
@@ -53,7 +63,7 @@ return view.extend({
 					if (ap[1].freq != 0) {
 						return [
 							dawn.getHostnameFromMAC(hostHintsData, client[0]),
-							dawn.getHostnameFromMAC(hostHintsData, ap[0]),
+							dawn.getHostnameFromMAC(ap_map, ap[0]),
 							dawn.getFormattedNumber(ap[1].freq, 3, 1000) + ' GHz (' + _('Channel') + ': ' + dawn.getChannelFromFrequency(ap[1].freq) + ')',
 							dawn.getAvailableText(ap[1].ht_capabilities && ap[1].ht_support),
 							dawn.getAvailableText(ap[1].vht_capabilities && ap[1].vht_support),
