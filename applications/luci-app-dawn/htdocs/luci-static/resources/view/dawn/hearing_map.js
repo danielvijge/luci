@@ -65,9 +65,9 @@ return view.extend({
 							ap[1].score
 						]
 					}
-				}).flat()
+				})
 				
-			});
+			}).flat();
 
 			cbi_update_table(hearing_map_table, clients, E('em', _('No clients connected.')));
 
